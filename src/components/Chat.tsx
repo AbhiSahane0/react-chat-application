@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage, receiveMessage } from "../features/chatSlice";
 import { RootState } from "../app/store";
-import { Button, TextField, List, ListItem, Typography } from "@mui/material";
+import { TextField, List, ListItem, Typography } from "@mui/material";
+
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import Stack from "@mui/material/Stack";
 
 const Chat: React.FC = () => {
   const [input, setInput] = useState("");
@@ -81,20 +85,26 @@ const Chat: React.FC = () => {
         </List>
       </div>
       <TextField
+        sx={{ mt: 2 }}
+        color="primary"
         fullWidth
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Type your message..."
         variant="outlined"
       />
-      <Button
-        onClick={handleSend}
-        variant="contained"
-        color="primary"
-        style={{ marginTop: "10px" }}
-      >
-        Send
-      </Button>
+
+      <Stack direction="row" spacing={2}>
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={handleSend}
+          color="primary"
+          style={{ marginTop: "10px" }}
+        >
+          Send
+        </Button>
+      </Stack>
     </div>
   );
 };
