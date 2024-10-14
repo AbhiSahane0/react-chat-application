@@ -2,15 +2,23 @@ import React, { useState, useEffect, useRef, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage, receiveMessage } from "../features/chatSlice";
 import { RootState } from "../app/store";
-import { TextField, List, ListItem, Typography } from "@mui/material";
-
-import Button from "@mui/material/Button";
+import {
+  TextField,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Avatar,
+  Typography,
+  Button,
+  Stack,
+  Divider,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import Stack from "@mui/material/Stack";
 
 const Chat: React.FC = () => {
   const [input, setInput] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const dispatch = useDispatch();
   const messages = useSelector((state: RootState) => state.chat.messages);
   const chatWindowRef = useRef<HTMLDivElement>(null);
@@ -22,7 +30,6 @@ const Chat: React.FC = () => {
     }
   };
 
-  // Simulate receiving messages
   useEffect(() => {
     const simulateMessage = () => {
       const receivedMessage = {
@@ -30,6 +37,7 @@ const Chat: React.FC = () => {
         text: "This is a simulated message.",
         user: "User2",
         timestamp: new Date().toLocaleTimeString(),
+        avatar: "",
       };
       startTransition(() => {
         dispatch(receiveMessage(receivedMessage));
@@ -40,7 +48,6 @@ const Chat: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [dispatch]);
 
-  // Auto-scroll to the latest message
   useEffect(() => {
     if (chatWindowRef.current) {
       chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
@@ -56,34 +63,59 @@ const Chat: React.FC = () => {
           overflowY: "auto",
           border: "1px solid #ccc",
           padding: "16px",
+          borderRadius: "10px",
         }}
       >
-        <List>
+        <List sx={{ borderRadius: "10px", overflow: "hidden" }}>
           {messages.map((message) => (
-            <ListItem key={message.id} alignItems="flex-start">
-              <div>
-                <Typography
-                  variant="body1"
-                  component="span"
-                  color={message.user === "User1" ? "primary" : "secondary"}
-                >
-                  {message.user}:
-                </Typography>
-                <Typography variant="body2" component="span">
-                  {` ${message.text}`}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="textSecondary"
-                  display="block"
-                >
-                  {message.timestamp}
-                </Typography>
-              </div>
-            </ListItem>
+            <React.Fragment key={message.id}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar
+                    alt={message.user}
+                    src={message.avatar || "/static/images/avatar/default.jpg"}
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: {
+                      fontFamily: "'Montserrat', sans-serif",
+                    },
+                  }}
+                  primary={message.text}
+                  secondary={
+                    <>
+                      <Typography
+                        sx={{
+                          display: "inline",
+                          fontFamily: "'Montserrat', sans-serif",
+                        }}
+                        component="span"
+                        variant="body2"
+                        color={
+                          message.user === "User1" ? "primary" : "secondary"
+                        }
+                      >
+                        {message.user}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="textSecondary"
+                        display="block"
+                        sx={{ fontFamily: "'Montserrat', sans-serif" }}
+                      >
+                        {message.timestamp}
+                      </Typography>
+                    </>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+            </React.Fragment>
           ))}
         </List>
       </div>
+
       <TextField
         sx={{ mt: 2 }}
         color="primary"

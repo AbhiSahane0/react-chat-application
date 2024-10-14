@@ -8,7 +8,11 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Container maxWidth="sm">
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{ fontFamily: "'Montserrat', sans-serif" }}
+        >
           Chat App
         </Typography>
         <Chat />

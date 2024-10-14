@@ -5,6 +5,7 @@ interface Message {
   text: string;
   user: string;
   timestamp: string;
+  avatar?: string;
 }
 
 interface ChatState {
@@ -14,7 +15,7 @@ interface ChatState {
 
 const initialState: ChatState = {
   messages: [],
-  currentUser: "User1", // This can be dynamic if needed
+  currentUser: "User1",
 };
 
 const chatSlice = createSlice({
